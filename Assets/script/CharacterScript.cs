@@ -9,6 +9,8 @@ public class CharacterScript : MonoBehaviour
 
     [SerializeField] float speed;
 
+    [SerializeField] float jumpForce;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,7 +33,7 @@ public class CharacterScript : MonoBehaviour
             transform.Translate(9, 0, 0);
         }
 
-        
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
 
     void FixedUpdate()

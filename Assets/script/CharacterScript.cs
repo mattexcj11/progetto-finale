@@ -4,40 +4,90 @@ using UnityEngine;
 
 public class CharacterScript : MonoBehaviour
 {
-
     [SerializeField] Rigidbody rb;
 
     [SerializeField] float speed;
 
     [SerializeField] float jumpForce;
 
-    // Start is called before the first frame update
+    bool isGrounded;
+
     void Start()
     {
-        
+        if (rb == null)
+        {
+            rb = GetComponent<Rigidbody>();
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // Se il giocatore preme e il personaggio non si trova già sulla corsia di sinistra del nostro tracciato, allora
+        // Se il giocatore preme A e il personaggio non si trova gia sulla corsia di sinistra, allora
         if (Input.GetKeyDown(KeyCode.A) && transform.position.x > -9)
         {
-            // Spostamento del personaggio di 9 unità a sinistra
+            // Spostamento del personaggio di 9 unita a sinistra
             transform.Translate(-9, 0, 0);
         }
-        // Se il giocatore preme e il personaggio non si trova già sulla corsia di destra del nostro tracciato, allora
+
+        // Se il giocatore preme D e il personaggio non si trova gia sulla corsia di destra, allora
         if (Input.GetKeyDown(KeyCode.D) && transform.position.x < 9)
         {
-            // Spostamento del personaggio di 9 unità a destra
+            // Spostamento del personaggio di 9 unita a destra
             transform.Translate(9, 0, 0);
         }
-
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
 
     void FixedUpdate()
     {
-        rb.MovePosition(transform.position + transform.forward * speed * Time.deltaTime);
+        // Movimento continuo in avanti
+        rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, speed);
+
+        // Salto: solo se il personaggio e a terra
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            rb.velocity = new Vector3(rb.velocity.x, jumpForce, speed);
+            isGrounded = false;
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (IsFloor(collision.collider))
+        {
+            isGrounded = true;
+        }
+    }
+
+    void OnCollisionStay(Collision collision)
+    {
+        if (IsFloor(collision.collider))
+        {
+            isGrounded = true;
+        }
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        if (IsFloor(collision.collider))
+        {
+            isGrounded = false;
+        }
+    }
+
+    bool IsFloor(Collider other)
+    {
+        Transform current = other.transform;
+
+        while (current != null)
+        {
+            if (current.CompareTag("Floor"))
+            {
+                return true;
+            }
+
+            current = current.parent;
+        }
+
+        return false;
     }
 }

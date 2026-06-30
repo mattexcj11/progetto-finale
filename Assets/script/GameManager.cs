@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -38,6 +39,11 @@ public class GameManager : MonoBehaviour
     {
     Instantiate(locations[Random.Range(0, locations.Count)], transform.forward* levelLength, transform.rotation);
     levelLength += 106.3f;
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
 

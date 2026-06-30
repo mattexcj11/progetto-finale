@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using TMPro;
+
 
 public class CharacterScript : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class CharacterScript : MonoBehaviour
     bool isGrounded;
 
     bool isGameOver;
+    [SerializeField] TMP_Text score;
+    float roundScore;
 
     void Start()
     {
@@ -29,13 +32,16 @@ public class CharacterScript : MonoBehaviour
     {
         if (!isGameOver)
         {
+            roundScore += Time.deltaTime;
+            score.text = "Score:" + roundScore.ToString("f1");
+
             // Se il giocatore preme A e il personaggio non si trova gia sulla corsia di sinistra, allora
             if (Input.GetKeyDown(KeyCode.A) && transform.position.x > -9)
             {
                 transform.Translate(-9, 0, 0);
             }
 
-        // Se il giocatore preme D e il personaggio non si trova gia sulla corsia di destra, allora
+            // Se il giocatore preme D e il personaggio non si trova gia sulla corsia di destra, allora
             if (Input.GetKeyDown(KeyCode.D) && transform.position.x < 9)
             {
                 // Spostamento del personaggio di 9 unita a destra
@@ -76,7 +82,7 @@ public class CharacterScript : MonoBehaviour
 
         return false;
     }
-
+    
     void OnCollisionEnter(Collision collision)
     {
         if (IsFloor(collision.collider))
@@ -108,10 +114,8 @@ public class CharacterScript : MonoBehaviour
         }
     }
 
-    public void RestartGame()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
+
 
 
 }
+

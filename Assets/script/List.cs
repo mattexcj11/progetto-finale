@@ -27,7 +27,7 @@ public class List : MonoBehaviour
 
         for (var i = 0; i < 3; i++)
         {
-            print(i)
+            print(i);
                 
         }
            

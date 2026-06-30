@@ -10,7 +10,11 @@ public class CharacterScript : MonoBehaviour
 
     [SerializeField] float jumpForce;
 
+    [SerializeField] GameObject menu;
+
     bool isGrounded;
+
+    bool isGameOver;
 
     void Start()
     {
@@ -35,19 +39,18 @@ public class CharacterScript : MonoBehaviour
             // Spostamento del personaggio di 9 unita a destra
             transform.Translate(9, 0, 0);
         }
-    }
 
+    
     void FixedUpdate()
     {
-        // Movimento continuo in avanti
-        rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, speed);
+        
 
-        // Salto: solo se il personaggio e a terra
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-        {
-            rb.velocity = new Vector3(rb.velocity.x, jumpForce, speed);
-            isGrounded = false;
-        }
+            // Salto: solo se il personaggio e a terra
+            if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+            {
+                rb.velocity = new Vector3(rb.velocity.x, jumpForce, speed);
+                isGrounded = false;
+            }
     }
 
     void OnCollisionEnter(Collision collision)
@@ -64,7 +67,14 @@ public class CharacterScript : MonoBehaviour
         {
             isGrounded = true;
         }
+
+        if (collision.gameObject.ComparetTag("Obstacle"))
+        {
+            isGameOver = true;
+            menu.SetActive(true);
+        }
     }
+
 
     void OnCollisionExit(Collision collision)
     {
@@ -90,4 +100,6 @@ public class CharacterScript : MonoBehaviour
 
         return false;
     }
+
+    
 }

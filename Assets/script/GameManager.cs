@@ -10,12 +10,18 @@ public class GameManager : MonoBehaviour
 
     float levelLength = 106.3f;
 
+    int count = 4;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
         Instantiate(locations[0], transform.forward, transform.rotation);
+        for (int i = 0; i < count; i++)
+        {
+            CreateLocation();
+        }
     }
 
     // Update is called once per frame

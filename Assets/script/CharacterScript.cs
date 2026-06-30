@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CharacterScript : MonoBehaviour
 {
@@ -26,31 +27,35 @@ public class CharacterScript : MonoBehaviour
 
     void Update()
     {
-        // Se il giocatore preme A e il personaggio non si trova gia sulla corsia di sinistra, allora
-        if (Input.GetKeyDown(KeyCode.A) && transform.position.x > -9)
+        if (!isGameOver)
         {
-            // Spostamento del personaggio di 9 unita a sinistra
-            transform.Translate(-9, 0, 0);
-        }
+            // Se il giocatore preme A e il personaggio non si trova gia sulla corsia di sinistra, allora
+            if (Input.GetKeyDown(KeyCode.A) && transform.position.x > -9)
+            {
+                transform.Translate(-9, 0, 0);
+            }
 
         // Se il giocatore preme D e il personaggio non si trova gia sulla corsia di destra, allora
-        if (Input.GetKeyDown(KeyCode.D) && transform.position.x < 9)
-        {
-            // Spostamento del personaggio di 9 unita a destra
-            transform.Translate(9, 0, 0);
+            if (Input.GetKeyDown(KeyCode.D) && transform.position.x < 9)
+            {
+                // Spostamento del personaggio di 9 unita a destra
+                transform.Translate(9, 0, 0);
+            }
         }
-
     }
 
     void FixedUpdate()
     {
-        transform.Translate(0,0, speed * Time.deltaTime);
-
-        // Salto: solo se il personaggio e a terra
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if(!isGameOver)
         {
-            rb.velocity = new Vector3(rb.velocity.x, jumpForce, speed);
-            isGrounded = false;
+            transform.Translate(0,0, speed * Time.deltaTime);
+
+            // Salto: solo se il personaggio e a terra
+            if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+            {
+                rb.velocity = new Vector3(rb.velocity.x, jumpForce, speed);
+                isGrounded = false;
+            }
         }
     }
 
@@ -101,6 +106,11 @@ public class CharacterScript : MonoBehaviour
         {
             isGrounded = false;
         }
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
 
